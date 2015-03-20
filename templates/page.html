@@ -1,0 +1,29 @@
+{% extends "include.html"%}
+
+{% block body %}
+    <form method = "post" class="form">
+        <span id="post_search_title">Special Test Database</span>
+<br/>
+        <span id = "input_post_search">
+            <input type="text" name="search" placeholder="Search Query"/>
+            <button type="submit" name="submit">Search</button>
+        </span>
+    </form>
+<br/><br/>
+    <title>{{ data['testName'] }}</title>
+    <div class="post_search_title"><h1>{{ data['testName'] }}</h1></div><br/><br/>
+    <div class="information">
+        <span id="sectionName"><h2>Purpose</h2></span>
+        {{ data['summary'] | safe}}
+    </div>
+    <br/><br/>
+    <div class="information">
+        <span id="sectionName"><h2>Procedure</h2></span>
+        {{ data['procedure'] | safe}}
+    </div>
+    <br/><br/>
+    <div class="information">
+        <span id="sectionName"><h2>Articles</h2></span>
+        {{ data['articles'] | safe}}
+    </div>
+{% endblock %}

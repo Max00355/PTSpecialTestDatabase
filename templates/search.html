@@ -1,0 +1,22 @@
+{% extends "include.html" %}
+{% block body %}
+    <title>PT Special Test Search </title>
+    <form method = "post" class="form">                                                                                                                                                                
+        <span id="post_search_title">Special Test Database</span>
+<br/>
+        <span id = "input_post_search">
+            <input type="text" name="search" placeholder="Search Query"/>
+            <button type="submit" name="submit">Search</button>
+        </span>
+    </form>
+    <br/><br/><div class="result_align">{{ results }} Results</div> <br><br>
+    {% for x in data %}
+        <div class="result_align">
+            <a href="/test/{{ x[1]['_id'] }}">{{ x[1]['testName'] }}</a><br/>
+            {{ x[1]['summary'] }}
+            
+        <br/>
+    </div>
+    {% endfor %}
+
+{% endblock %}

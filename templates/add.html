@@ -1,0 +1,21 @@
+<form method = "post">
+    Body Part <select name="body_part">
+                <option name="shoulder">Shoulder</option>
+                <option name="elbow">Elbow</option>
+                <option name="hand">Hand</option>
+                <option name="wrist">Wrist</option>
+                <option name="spine">Spine</option>
+                <option name="hip">Hip</option>
+                <option name="knee">Knee</option>
+                <option name="ankle">Ankle</option>
+                <option name="foot">Foot</option>
+            </select>
+            <br/>
+            Test Name: <input type="text" name="test_name" value="{{ test_name }}"/><br/>
+            Keywords: <input type="text" name="keywords" value="{{ keywords }}"/><br/>
+    Summary: <textarea name="summary" height="250px" width="250px" type="text" style="width: 578px; height: 202px;">{{ summary }}</textarea><br/>
+    Procedure: <textarea type="text" width= 250px height=250px name="procedure" style="width: 578px; height: 202px;"> {{ procedure }}</textarea><br/>
+    Articles: <textarea type="text" width= 250px height=250px name="articles" style="width: 578px; height: 202px;">{{ articles }}</textarea> <br/>
+    <input type="submit" value="add"/>
+
+</form>
