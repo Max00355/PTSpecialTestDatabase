@@ -14,16 +14,26 @@
     <div class="post_search_title"><h1>{{ data['testName'] }}</h1></div><br/><br/>
     <div class="information">
         <span id="sectionName"><h2>Purpose</h2></span>
-        {{ data['summary'] | safe}}
+        {{ data['summary'] | replace("\n", "<br/>") | safe}}
     </div>
     <br/><br/>
     <div class="information">
         <span id="sectionName"><h2>Procedure</h2></span>
-        {{ data['procedure'] | safe}}
+        {{ data['procedure'] | replace("\n", "<br/>") | safe}}
     </div>
     <br/><br/>
     <div class="information">
+        <span id="sectionName"><h2>Video</h2></span>
+        <iframe width="420" height="315" src="https://youtube.com/embeded/{{ data['videoid']}}" frameborder="0" allowfullscreen></iframe>
+    
+        </span>
+    </div>    
+    <br/><br/>
+    <div class="information">
         <span id="sectionName"><h2>Articles</h2></span>
-        {{ data['articles'] | safe}}
-    </div>
+        {% for x in data['articles'].split("\n") %}
+            <a href="{{ x }}">{{ x }}</a>
+        {% endfor %}
+        
+</div>
 {% endblock %}

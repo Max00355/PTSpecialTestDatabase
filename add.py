@@ -35,8 +35,9 @@ def method2(_id):
     test_name = data['testName']
     articles = data['articles']
     
-    
-    return render_template("add.html",summary=summary, procedure=procedure, keywords=keywords, test_name=test_name, articles=articles)
+    video_id = data['videoid']
+
+    return render_template("add.html",summary=summary, procedure=procedure, keywords=keywords, test_name=test_name, articles=articles, video_id=video_id)
 
 
 @add.route("/add/", methods=['GET', 'POST'])
@@ -51,12 +52,13 @@ def method():
         summary = request.form['summary']
         procedure = request.form['procedure']
         articles = request.form['articles']
+        video_id = request.form['video_id']
         data = [x for x in mongo.db.enteries.find()]
         found = False
         for x in data:
             if x['testName'].lower() == name.lower():
                 found = True
-                mongo.db.enteries.update({"testName":x['testName']}, {"bodyPart":bodyPart, "testName":name, "keywords":keywords, "summary":summary, "procedure":procedure, "articles":articles})
+                mongo.db.enteries.update({"testName":x['testName']}, {"bodyPart":bodyPart, "testName":name, "keywords":keywords, "summary":summary, "procedure":procedure, "articles":articles, "videoid":})
                 break
         if not found:
             mongo.db.enteries.insert({"bodyPart":bodyPart, "testName":name, "keywords":keywords, "summary":summary, "procedure":procedure, "articles":articles})
