@@ -76,6 +76,10 @@ def method_search(search):
                 break
     
         data = [(0, rawSearch)] + data
+    if data[0][1]['testName'] == "No tests found":
+        results = 0
+    else:
+        results = len(data)
 
-    return render_template("search.html", data=data, results=len(data))
+    return render_template("search.html", data=data, results=results)
 

@@ -7,8 +7,8 @@ add.jinja_autoescape = False
 
 @add.route("/add/<_id>", methods=['GET', 'POST'])
 def method2(_id):
-    if request.remote_addr != "127.0.0.1":
-        return "404 Page not found.", 404
+    #if request.remote_addr != "127.0.0.1" and not request.remote_addr.startswith("192.168.1."):
+     #  return "404 Page not found.", 404
     _id = ObjectId(_id)
     if request.method == "POST":
         bodyPart = request.form['body_part'].lower()
@@ -17,12 +17,13 @@ def method2(_id):
         summary = request.form['summary']
         procedure = request.form['procedure']
         articles = request.form['articles']
+        video_id = request.form['video_id']
         data = [x for x in mongo.db.enteries.find()]
         found = False
         for x in data:
             if x['testName'].lower() == name.lower():
                 found = True
-                mongo.db.enteries.update({"testName":x['testName']}, {"bodyPart":bodyPart, "testName":name, "keywords":keywords, "summary":summary, "procedure":procedure, "articles":articles})
+                mongo.db.enteries.update({"testName":x['testName']}, {"bodyPart":bodyPart, "testName":name, "keywords":keywords, "summary":summary, "procedure":procedure, "articles":articles, "videoid":video_id})
                 break
         if not found:
             mongo.db.enteries.insert({"bodyPart":bodyPart, "testName":name, "keywords":keywords, "summary":summary, "procedure":procedure, "articles":articles})
@@ -42,7 +43,7 @@ def method2(_id):
 
 @add.route("/add/", methods=['GET', 'POST'])
 def method():
-    if request.remote_addr != "127.0.0.1":
+    if request.remote_addr != "127.0.0.1" and not request.remote_addr.startswith("192.168.1."):
         return "404 Page not found.", 404
 
     if request.method == "POST":
@@ -58,7 +59,7 @@ def method():
         for x in data:
             if x['testName'].lower() == name.lower():
                 found = True
-                mongo.db.enteries.update({"testName":x['testName']}, {"bodyPart":bodyPart, "testName":name, "keywords":keywords, "summary":summary, "procedure":procedure, "articles":articles, "videoid":})
+                mongo.db.enteries.update({"testName":x['testName']}, {"bodyPart":bodyPart, "testName":name, "keywords":keywords, "summary":summary, "procedure":procedure, "articles":articles, "videoid":video_id})
                 break
         if not found:
             mongo.db.enteries.insert({"bodyPart":bodyPart, "testName":name, "keywords":keywords, "summary":summary, "procedure":procedure, "articles":articles})
