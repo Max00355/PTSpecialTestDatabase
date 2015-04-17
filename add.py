@@ -26,7 +26,7 @@ def method2(_id):
                 mongo.db.enteries.update({"testName":x['testName']}, {"bodyPart":bodyPart, "testName":name, "keywords":keywords, "summary":summary, "procedure":procedure, "articles":articles, "videoid":video_id})
                 break
         if not found:
-            mongo.db.enteries.insert({"bodyPart":bodyPart, "testName":name, "keywords":keywords, "summary":summary, "procedure":procedure, "articles":articles})
+            mongo.db.enteries.insert({"bodyPart":bodyPart, "testName":name, "keywords":keywords, "summary":summary, "procedure":procedure, "articles":articles, "videoid":video_id})
         return redirect("/test/{}".format(_id))
 
     data = mongo.db.enteries.find_one({"_id":_id})
@@ -43,8 +43,8 @@ def method2(_id):
 
 @add.route("/add/", methods=['GET', 'POST'])
 def method():
-    if request.remote_addr != "127.0.0.1" and not request.remote_addr.startswith("192.168.1."):
-        return "404 Page not found.", 404
+    #if request.remote_addr != "127.0.0.1" and not request.remote_addr.startswith("192.168.1."):
+        #return "404 Page not found.", 404
 
     if request.method == "POST":
         bodyPart = request.form['body_part'].lower()
@@ -62,7 +62,7 @@ def method():
                 mongo.db.enteries.update({"testName":x['testName']}, {"bodyPart":bodyPart, "testName":name, "keywords":keywords, "summary":summary, "procedure":procedure, "articles":articles, "videoid":video_id})
                 break
         if not found:
-            mongo.db.enteries.insert({"bodyPart":bodyPart, "testName":name, "keywords":keywords, "summary":summary, "procedure":procedure, "articles":articles})
+            mongo.db.enteries.insert({"bodyPart":bodyPart, "testName":name, "keywords":keywords, "summary":summary, "procedure":procedure, "articles":articles, "videoid":video_id})
         return redirect("/test/{}".format(_id))
 
     return render_template("add.html")

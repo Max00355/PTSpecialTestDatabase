@@ -34,7 +34,7 @@ def method_search(search):
     
     baseKeys = {
         "spine":["lumbar", "cervical", "spine", "lower back", "upper back", "mid back", "middle back", "back"],
-
+        "knee":["patella", "popliteal", "knee"],
     }
     
     for part in baseKeys:
