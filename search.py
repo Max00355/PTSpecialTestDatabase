@@ -58,9 +58,12 @@ def method_search(search):
         nextSearch = mongo.db.enteries.find({"bodyPart":bodyPart})
     else:
         nextSearch = mongo.db.enteries.find()
-
+    
     data = [] #(numOfMatches, data)
     
+    if rawSearch:
+        data = [(5000, rawSearch)]
+
     # This is the ranking algorithm. We traverse the nextSearch array and find the number of matching keywords in the raw search.
     # The number of matches is recorded and compared against other enteries in the data array. A minimum of 25 tests are returned and they are ranked by the number of keyword matches.
 
@@ -70,16 +73,26 @@ def method_search(search):
             if keyword in search:
                 matches += 1
         if len(data) < 25:
-            data.append((matches, s))
-            data = sorted(data, key=lambda x: x[0])
+            for c in data:
+                if c[1]['testName'] == s['testName']:
+                    break
+            else:
+                if matches > 0:
+                    data.append((matches, s))
+                    data = sorted(data, key=lambda x: x[0])
         else:
             if matches > data[0][0]:
-                data.pop(0)
-                data.append((matches, s))
-                data = sorted(data, key=lambda x: x[0])
+                for c in data:
+                    if c[1]['testName'] == s['testName']:
+                        break
+                else:
+                    if matches > 0:
+                        data.pop(0)
+                        data.append((matches, s))
+                        data = sorted(data, key=lambda x: x[0])
     
-    results = results + len(data)
+    results = len(data)
     data.reverse()
 
-    return render_template("search.html", data=data, results=results, exactFind=rawSearch)
+    return render_template("search.html", data=data, results=results)
 
