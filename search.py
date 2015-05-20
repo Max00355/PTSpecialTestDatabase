@@ -29,12 +29,19 @@ def method_search(search):
     search = ' '.join(search)
     bodyPart = None
     rawSearch = mongo.db.enteries.find_one({"testName":{"$regex":search, "$options":"-i"}})
-    if rawSearch:
+    results = 0
+
+    if rawSearch: # If the search is an exact match to some test in the database
         bodyPart = rawSearch['bodyPart']
-    
+        results += 1
+
     baseKeys = {
-        "spine":["lumbar", "cervical", "spine", "lower back", "upper back", "mid back", "middle back", "back"],
+        "spine":["lumbar", "cervical", "spine", "lower back", "upper back", "mid back", "middle back", "back", "sacrum", "sacro"],
         "knee":["patella", "popliteal", "knee"],
+        "shoulder":["shoulder", "rotator cuff"],
+        "elbow":["olecranon", "elbow"],
+        "wrist":["wrist", "hand"],
+        "hip":["hip", "pelvis", "pelvic", "sacro", "sacrum", "labrum", "labral"]
     }
     
     for part in baseKeys:
@@ -46,40 +53,33 @@ def method_search(search):
      
     if bodyPart:
         search = search.replace(altName, bodyPart)
-     
-    if not bodyPart:    
-        rawData = mongo.db.enteries.find()
-    else:
-        rawData = mongo.db.enteries.find({"bodyPart":bodyPart})
-    ranking = []
-    for i in rawData:
-        keyWords = i['keywords']
-        rank = 0
-        for x in keyWords:
-            if search.find(x.lower()) != -1:
-                rank += 1
-        if rank != 0:
-            ranking.append((rank, i))
-        
-    data = sorted(ranking)
-    data.reverse()
-    if not data:
-        if not rawSearch:
-            data = [(0, {"testName":"No tests found"})]
-        else:
-            data = [(0, x) for x in mongo.db.enteries.find()]
-            
-    if rawSearch:
-        for x in range(len(data)):
-            if data[x][1] == rawSearch:
-                data.pop(x)
-                break
     
-        data = [(0, rawSearch)] + data
-    if data[0][1]['testName'] == "No tests found":
-        results = 0
+    if bodyPart:
+        nextSearch = mongo.db.enteries.find({"bodyPart":bodyPart})
     else:
-        results = len(data)
+        nextSearch = mongo.db.enteries.find()
 
-    return render_template("search.html", data=data, results=results)
+    data = [] #(numOfMatches, data)
+    
+    # This is the ranking algorithm. We traverse the nextSearch array and find the number of matching keywords in the raw search.
+    # The number of matches is recorded and compared against other enteries in the data array. A minimum of 25 tests are returned and they are ranked by the number of keyword matches.
+
+    for s in nextSearch:
+        matches = 0
+        for keyword in s['keywords']:
+            if keyword in search:
+                matches += 1
+        if len(data) < 25:
+            data.append((matches, s))
+            data = sorted(data, key=lambda x: x[0])
+        else:
+            if matches > data[0][0]:
+                data.pop(0)
+                data.append((matches, s))
+                data = sorted(data, key=lambda x: x[0])
+    
+    results = results + len(data)
+    data.reverse()
+
+    return render_template("search.html", data=data, results=results, exactFind=rawSearch)
 

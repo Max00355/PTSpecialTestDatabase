@@ -10,11 +10,12 @@
         </span>
     </form>
     <br/><br/><div class="result_align">{{ results }} Results</div> <br><br>
+    {% if exactFind %}
+    <div class="result_align"><a href="/test/{{ exactFind['_id'] }}">{{ exactFind['testName'] }}</a><br/>{{ exactFind['summary'] }}</div><br/>
+    {% endif %}
     {% for x in data %}
         <div class="result_align">
-            <a href="/test/{{ x[1]['_id'] }}">{{ x[1]['testName'] }}</a><br/>
-            {{ x[1]['summary'] }}
-            
+            <a href="/test/{{ x[1]['_id'] }}">{{ x[1]['testName'] }}</a><br/>{{ x[1]['summary'] }}     
         <br/>
     </div>
     {% endfor %}
